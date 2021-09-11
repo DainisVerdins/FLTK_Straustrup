@@ -11,6 +11,15 @@ constexpr auto WIN_LENGTH = 600;
 constexpr auto WIN_WIDTH = 400;
 
 
+#include"superellipse.h"
+
+
+double sgn(double x) {
+	//calc x for super curve
+	return ((x > 0) - (x < 0)) * 1;
+
+}
+
 int main()
 {
 	try
@@ -20,7 +29,10 @@ int main()
 		Point top_left{ 100, 100 };    //will be top left corner of window
 		Simple_window win{ top_left, WIN_LENGTH, WIN_WIDTH, "superelips for 12 task" };
 		
-	
+		//TODO MAKE WITH MULTIPLE COLORS
+		Superellipse elipse{ Point{250,250},100,100,0.5,0.5 };
+
+		win.attach(elipse.get_graph());
 		win.wait_for_button();  //give control to the display engine
 	}
 	catch (const std::exception& e)
