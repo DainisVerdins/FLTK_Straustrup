@@ -1,0 +1,52 @@
+//how to install fmltk https://bumpyroadtocode.com/2017/08/29/how-to-install-and-use-fltk-1-3-4-in-visual-studio-2017-complete-guide-2-0-no-cross-contamination/
+#include "Fix/Simple_window.h"
+#include "Fix/Graph.h"
+#include "Fix/std_lib_facilities.h"
+#include<iostream>
+constexpr auto FONT_LENGTH = 150;
+
+int main()
+{
+	try
+	{
+		using namespace Graph_lib; //our graphics facilities are in Graph_lib (defined in Graph.h)
+
+		Point top_left{ 100, 100 };    //will be top left corner of window
+
+		Simple_window win{ top_left, 600, 400, "Canvas" };
+
+		/*D inicial drawing*/
+		Graph_lib::Line d_line{ Point{150,150},Point{150,150 + FONT_LENGTH} };
+		Graph_lib::Line d_LR_line{ Point{150,150},Point{150 + (FONT_LENGTH / 2),150 + (FONT_LENGTH / 2) } };//faling
+		Graph_lib::Line d_RL_line{ Point{150 + (FONT_LENGTH / 2),150 + (FONT_LENGTH / 2)},Point{150,150 + FONT_LENGTH } };
+
+		win.attach(d_line);
+		win.attach(d_LR_line);
+		win.attach(d_RL_line);
+
+		/*V inicial drawing*/
+		Graph_lib::Lines v_line;
+		v_line.add(Point{ 150 + FONT_LENGTH ,150 }, Point{ 150 + FONT_LENGTH+ (FONT_LENGTH/2) ,150 + FONT_LENGTH });// LR falling
+		
+		v_line.add(Point{ 150 + (FONT_LENGTH * 2),150 }, Point{ 150 + FONT_LENGTH + (FONT_LENGTH / 2) ,150 + FONT_LENGTH });// LR rising
+
+
+
+
+		win.attach(v_line);
+
+		win.set_label("Canvas task 3 ");
+
+		win.wait_for_button();  //give control to the display engine
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+		return 1;
+	}
+	catch (...)
+	{
+		return 2;
+	}
+	return 0;
+}
