@@ -1,4 +1,4 @@
-﻿//how to install fmltk https://bumpyroadtocode.com/2017/08/29/how-to-install-and-use-fltk-1-3-4-in-visual-studio-2017-complete-guide-2-0-no-cross-contamination/
+//how to install fmltk https://bumpyroadtocode.com/2017/08/29/how-to-install-and-use-fltk-1-3-4-in-visual-studio-2017-complete-guide-2-0-no-cross-contamination/
 #define _USE_MATH_DEFINES
 #include "Fix/Simple_window.h"
 #include "Fix/Graph.h"
