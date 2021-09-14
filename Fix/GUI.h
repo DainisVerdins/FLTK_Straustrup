@@ -104,7 +104,7 @@ struct Menu : Widget {
 
         void show()                 // show all buttons
         {
-            for (unsigned int i = 0; i<selection.size(); ++i)
+			for (unsigned int i = 0; i < unsigned int(selection.size()); ++i)
                 selection[i].show();
         }
         void hide();                 // hide all buttons

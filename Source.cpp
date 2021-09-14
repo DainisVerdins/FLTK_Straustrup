@@ -3,103 +3,44 @@
 #include "Fix/Simple_window.h"
 #include "Fix/Graph.h"
 #include "Fix/std_lib_facilities.h"
-#include<iostream>
-#include<cstdint>
-#include<cmath>
+#include <iostream>
+#include <cmath>
 
-constexpr auto WIN_LENGTH = 800;//in pixels
-constexpr auto WIN_WIDTH = 800;
+constexpr auto WIN_LENGTH = 600; //in pixels
+constexpr auto WIN_WIDTH = 400;
 
 
 using namespace Graph_lib; //our graphics facilities are in Graph_lib (defined in Graph.h)
 
-int main()
-{
-	try
-	{
+int main() {
+	try {
 
-		Point top_left{ 100, 100 };    //will be top left corner of window
+		Point top_left{ 100, 100 }; //will be top left corner of window
 		Simple_window win{ top_left, WIN_LENGTH, WIN_WIDTH, "simple window" };
 
-		int x_grid = 100;//size of grid in pixels
-		int y_grid = 100;
-		int x_size = WIN_LENGTH;//size of win
-		int y_size = WIN_WIDTH;
-		Lines grid;
 
-		//draw grid
-		for (int x = x_grid; x < x_size; x += x_grid) {//vertical lines
-			grid.add(Point{ x,0 }, Point{ x,y_size });
-		}
-		for (int y = y_grid; y < y_size; y += y_grid) {//horizontal lines
-			grid.add(Point{ 0,y }, Point{ x_size ,y });
+		int width = 30;
+		int height = 111;
 
-		}
-		//create red rects for grid diagonal 
-		std::vector<Graph_lib::Rectangle*> rects;
-		const int red_rect_count = 8;
-		for (size_t i = 0; i < red_rect_count; i++)
-		{
-			rects.push_back(new Graph_lib::Rectangle{ Point{ int(i * x_grid),int(y_grid * i) },x_grid,y_grid });
-			rects.at(i)->set_fill_color(Color::red);
-		}
 
-		//create red rects for grid diagonal 
-		std::vector<Graph_lib::Image*> faces {
-		new Graph_lib::Image { Point{x_size-200,y_size-600},"crazy_diamond_200.jpg" },
-		new  Graph_lib::Image { Point{200,0},"crazy_diamond_200.jpg" },
-		new  Graph_lib::Image { Point{0,200},"crazy_diamond_200.jpg" },
-		new  Graph_lib::Image { Point{400,600},"crazy_diamond_200.jpg" }
-		};
+		Graph_lib::Rectangle rect{ Point{ 300, 200 }, Point{ 300 + width, 200 + height } };
+		rect.set_color(Color::red);
 
+
+		Graph_lib::Box arc{ Point{ 300, 200 }, width, height }; //300 200 
+		arc.set_color(Color::black);
+
+
+		win.attach(rect);
+		win.attach(arc);
 		
-
-		Graph_lib::Image Player{ Point{500,0},"pepe_100.jpg" };
-
-		/*drawing part*/
-
-		grid.set_color(Color::black);
-		win.attach(grid);
-
-		//draw faces.
-		for (auto face : faces) {
-			win.attach(*face);
-		}
-
-		//red rects.
-		for (auto elem : rects) {
-			win.attach(*elem);
-		}
-
-		win.attach(Player);
-		std::vector<std::pair<int, int>> new_steps{
-			{ 200, 300},
-			{-200,400},
-			{-400,-400},
-			{200,-200},
-			{200,-100}
-		};
-
-		const int move_count = 8;
-		int i = 0;
-		while (i!= move_count)
-		{
-			win.wait_for_button();  //give control to the display engine
-			
-			Player.move(new_steps[i%new_steps.size()].first, new_steps[i % new_steps.size()].second);
-			//Player.move( 200, 300);
-
-			++i;
-		}
-		
+		win.wait_for_button(); //give control to the display engine
 	}
-	catch (const std::exception& e)
-	{
+	catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;
 		return 1;
 	}
-	catch (...)
-	{
+	catch (...) {
 		return 2;
 	}
 	return 0;
