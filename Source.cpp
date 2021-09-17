@@ -18,22 +18,19 @@ int main() {
 		Point top_left{ 100, 100 }; //will be top left corner of window
 		Simple_window win{ top_left, WIN_LENGTH, WIN_WIDTH, "simple window" };
 
-
-		int width = 30;
-		int height = 111;
-
-
-		Graph_lib::Rectangle rect{ Point{ 300, 200 }, Point{ 300 + width, 200 + height } };
-		rect.set_color(Color::red);
-
-
-		Graph_lib::Box arc{ Point{ 300, 200 }, width, height }; //300 200 
-		arc.set_color(Color::black);
-
-
-		win.attach(rect);
-		win.attach(arc);
 		
+		Graph_lib::TextBox window_box{ Point{ 80, 50 }, 70, "Window" };
+		window_box.set_color(Color::black);
+		Graph_lib::TextBox simple_window_box{ Point{ 50, 150 }, 120, "Simple_window" };
+		simple_window_box.set_color(Color::black);
+		Graph_lib::Arrow win_sim_win_arrow{ Point{ 110, 150 }, Point{ 110,75 } };
+		win_sim_win_arrow.set_color(Color::black);
+
+		//wIndow and simple window
+		win.attach(window_box);
+		win.attach(simple_window_box);
+		win.attach(win_sim_win_arrow);
+
 		win.wait_for_button(); //give control to the display engine
 	}
 	catch (const std::exception& e) {

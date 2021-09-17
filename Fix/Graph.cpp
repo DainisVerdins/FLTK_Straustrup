@@ -9,7 +9,7 @@
 #include "Graph.h"
 
 #include "std_lib_facilities.h"
-#include <algorithm>
+#include <cmath>
 //------------------------------------------------------------------------------
 
 namespace Graph_lib {
@@ -541,7 +541,7 @@ namespace Graph_lib {
 			error("radius cannot be negative or zero");
 		}
 		add(Point{ center_coords.x - r, center_coords.y - r }); // middle point of arc from with things happens
-		//add(center_coords); // if so then arc is moved at anu axis by +r
+																//add(center_coords); // if so then arc is moved at anu axis by +r
 	}
 
 
@@ -582,10 +582,10 @@ namespace Graph_lib {
 
 			//TODO : remove variables
 
-			int Ax = point(0).x ;
+			int Ax = point(0).x;
 			int Ay = point(0).y;
 			int Bx = Ax + w;
-			int By = Ay ;
+			int By = Ay;
 
 
 			int Cx = point(0).x;
@@ -595,23 +595,208 @@ namespace Graph_lib {
 			int Dy = By + h;
 
 			//drawing lines
-			// from A to B 
+			// from A to B
 			fl_line(Ax + (radius / 2), Ay, Bx - (radius / 2), By);
-			//from B to D 
+			//from B to D
 			fl_line(Bx, By + (radius / 2), Dx, Dy - (radius / 2));
 			//from A to C
-			fl_line(Ax, Ay + (radius / 2), Cx, Cy -(radius / 2));
+			fl_line(Ax, Ay + (radius / 2), Cx, Cy - (radius / 2));
 			//from C to D
 			fl_line(Cx + (radius / 2), Cy, Dx - (radius / 2), Dy);
 
 			//drawing arcs
 			fl_arc(Bx - radius, By, radius, radius, 0, 90);
-			fl_arc(Ax, Ay , radius, radius, 90, 180);
-			fl_arc(Cx, Cy - radius , radius, radius, 180, 270);
+			fl_arc(Ax, Ay, radius, radius, 90, 180);
+			fl_arc(Cx, Cy - radius, radius, radius, 180, 270);
 			fl_arc(Dx - radius, Dy + -radius, radius, radius, 270, 0);
-
-
 		}
+	}
+
+
+	void Arrow::draw_lines() const {
+		if (color().visibility()) {
+			// NOT MY CODE ATT ALL BUT IS WORKING
+			//draw a line
+			Line::draw_lines();
+
+			// add arrowhead: p2 and two points
+			double line_len =
+				sqrt(double(pow(point(1).x - point(0).x, 2) + pow(point(1).y - point(0).y, 2))); // length of p1p2
+
+			// coordinates of the a point on p1p2 with distance 8 from p2
+			double pol_x = 8 / line_len * point(0).x + (1 - 8 / line_len) * point(1).x;
+			double pol_y = 8 / line_len * point(0).y + (1 - 8 / line_len) * point(1).y;
+
+			// pl is 4 away from p1p2 on the "left", pl_pol is orthogonal to p1p2
+			double pl_x = pol_x + 4 / line_len * (double(point(1).y) - double(point(0).y));
+			double pl_y = pol_y + 4 / line_len * (double(point(0).x) - double(point(1).x));
+
+			// pr is 4 away from p1p2 on the "right", pr_pol is orthogonal to p1p2
+			double pr_x = pol_x + 4 / line_len * (double(point(0).y) - double(point(1).y));
+			double pr_y = pol_y + 4 / line_len * (double(point(1).x) - double(point(0).x));
+
+			// draw arrowhead - is always filled in line color
+			if (color().visibility()) {
+				fl_begin_complex_polygon();
+				fl_vertex(point(1).x, point(1).y);
+				fl_vertex(pl_x, pl_y);
+				fl_vertex(pr_x, pr_y);
+				fl_end_complex_polygon();
+			}
+		}
+	}
+
+
+	//North angle of React
+	Point n(const Graph_lib::Rectangle& r) {
+
+		return Point{ r.point(0).x + (r.width() / 2), r.point(0).y };
+	}
+
+	//South of rect
+	Point s(const Graph_lib::Rectangle& r) {
+		return Point{ r.point(0).x + (r.width() / 2), r.point(0).y + (r.height() / 2) };
+	}
+	//east of rect
+	Point e(const Graph_lib::Rectangle& r) {
+		return Point{ r.point(0).x + r.width(), r.point(0).y + (r.height() / 2) };
+	}
+	//west of rect point
+	Point w(const Graph_lib::Rectangle& r) {
+		return Point{ r.point(0).x, r.point(0).y + (r.height() / 2) };
+	}
+
+	Point center(const Graph_lib::Rectangle& r) {
+
+		return Point{ r.point(0).x + (r.width() / 2), r.point(0).y + (r.height() / 2) };
+	}
+
+	Point ne(const Graph_lib::Rectangle& r) {
+		return Point{ r.point(0).x + r.width(), r.point(0).y };
+	}
+
+	Point se(const Graph_lib::Rectangle& r) {
+		return Point{ r.point(0).x + r.width(), r.point(0).y + r.height() };
+	}
+
+	Point nw(const Graph_lib::Rectangle& r) {
+		return r.point(0); //left corner
+	}
+
+	Point sw(const Graph_lib::Rectangle& r) {
+		return Point{ r.point(0).x, r.point(0).y + r.height() };
+	}
+
+	Point n(const Graph_lib::Circle& c) {
+
+		return Point{ c.point(0).x + (c.radius() / 2), c.point(0).y };
+	}
+
+	Point s(const Graph_lib::Circle& c) {
+		return Point{ c.point(0).x + (c.radius() / 2), c.point(0).y + (c.radius() / 2) };
+	}
+
+	Point e(const Graph_lib::Circle& c) {
+		return Point{ c.point(0).x + c.radius(), c.point(0).y + (c.radius() / 2) };
+	}
+
+	Point w(const Graph_lib::Circle& c) {
+		return Point{ c.point(0).x, c.point(0).y + (c.radius() / 2) };
+		;
+	}
+
+	Point center(const Graph_lib::Circle& c) {
+		return Point{ c.point(0).x + (c.radius() / 2), c.point(0).y + (c.radius() / 2) };
+	}
+
+	Point ne(const Graph_lib::Circle& c) {
+		return Point{ c.point(0).x + c.radius(), c.point(0).y };
+	}
+
+	Point se(const Graph_lib::Circle& c) {
+		return Point{ c.point(0).x + c.radius(), c.point(0).y + c.radius() };
+	}
+
+	Point nw(const Graph_lib::Circle& c) {
+		return Point{ c.point(0).x, c.point(0).y };
+	}
+
+	Point sw(const Graph_lib::Circle& c) {
+		return Point{ c.point(0).x, c.point(0).y + c.radius() };
+	}
+
+	Point n(const Graph_lib::Ellipse& el) {
+
+
+		return Point{ el.center().x, el.center().y - el.minor() };
+	}
+
+	Point s(const Graph_lib::Ellipse& el) {
+		return Point{ el.center().x, el.center().y + el.minor() };
+	}
+
+	Point e(const Graph_lib::Ellipse& el) {
+		//calc distance from center to elipse end by horiznotal
+		//https://www.softschools.com/math/calculus/finding_the_foci_of_an_ellipse/
+
+		int a = std::sqrt(std::pow(el.minor(), 2) + std::pow(el.major(), 2));
+
+
+		return Point{ el.center().x + a, el.center().y };
+	}
+
+	Point w(const Graph_lib::Ellipse& el) {
+		//calc distance from center to elipse end by horiznotal
+		int a = std::sqrt(std::pow(el.minor(), 2) + std::pow(el.major(), 2));
+		return Point{ el.center().x - a, el.center().y };
+	}
+
+	Point center(const Graph_lib::Ellipse& el) {
+		return el.center();
+	}
+
+	Point ne(const Graph_lib::Ellipse& el) {
+
+		int a = std::sqrt(std::pow(el.minor(), 2) + std::pow(el.major(), 2));
+
+		return Point{ el.center().x + a, el.center().y - el.minor() };
+	}
+
+	Point se(const Graph_lib::Ellipse& el) {
+		int a = std::sqrt(std::pow(el.minor(), 2) + std::pow(el.major(), 2));
+		return Point{ el.center().x + a, el.center().y + el.minor() };
+	}
+
+	Point nw(const Graph_lib::Ellipse& el) {
+		int a = std::sqrt(std::pow(el.minor(), 2) + std::pow(el.major(), 2));
+		return Point{ el.center().x - a, el.center().y - el.minor() };
+	}
+
+	Point sw(const Graph_lib::Ellipse& el) {
+		int a = std::sqrt(std::pow(el.minor(), 2) + std::pow(el.major(), 2));
+		return Point{ el.center().x - a, el.center().y + el.minor() };
+	}
+
+	TextBox::TextBox(Point xy, int ww, const std::string& s)
+		: Box::Box{ xy, ww, H_TB }, text{ Point{ xy.x + 7, xy.y + 17 }, s } //7 and 17 just on eye was took
+	{}
+
+	void TextBox::draw_lines() const {
+		if (color().visibility()) {
+			Box::draw_lines();
+			text.draw(); //draw text inside box
+		
+		}
+	}
+
+	void TextBox::set_color(Color c) {
+		Box::set_color(c);
+		text.set_color(c);
+	}
+
+	void TextBox::move(int dx, int dy) {
+		Box::Box::move(dx, dy);
+		text.move(dx, dy);
 	}
 
 } // of namespace Graph_lib
