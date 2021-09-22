@@ -5,7 +5,7 @@
 #include "Fix/std_lib_facilities.h"
 #include <iostream>
 #include <cmath>
-
+#include <iomanip>
 constexpr auto WIN_LENGTH = 600; //in pixels
 constexpr auto WIN_WIDTH = 400;
 
@@ -17,21 +17,10 @@ int main() {
 
 		Point top_left{ 100, 100 }; //will be top left corner of window
 		Simple_window win{ top_left, WIN_LENGTH, WIN_WIDTH, "simple window" };
-
 		
-		Graph_lib::TextBox window_box{ Point{ 80, 50 }, 70, "Window" };
-		window_box.set_color(Color::black);
-		Graph_lib::TextBox simple_window_box{ Point{ 50, 150 }, 120, "Simple_window" };
-		simple_window_box.set_color(Color::black);
-		Graph_lib::Arrow win_sim_win_arrow{ Point{ 110, 150 }, Point{ 110,75 } };
-		win_sim_win_arrow.set_color(Color::black);
+		//now on chapter 16
 
-		//wIndow and simple window
-		win.attach(window_box);
-		win.attach(simple_window_box);
-		win.attach(win_sim_win_arrow);
-
-		win.wait_for_button(); //give control to the display engine
+		win.wait_for_button();
 	}
 	catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;

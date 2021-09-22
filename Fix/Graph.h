@@ -438,27 +438,24 @@ namespace Graph_lib {
 		int w;
 		int h;
 		int radius;
-		
 	};
 	//-----------------------------------------------------------------------------
 
-	struct TextBox:Box {
+	struct TextBox : Box {
 		TextBox(Point xy, int ww, const std::string& s);
 		void draw_lines() const;
 
 		void set_label(const string& s) { text.set_label(s); }
-		string label() const {return text.label();}
+		string label() const { return text.label(); }
 
 		void set_color(Color c);
 
-		void move(int dx, int dy);//move by specific distance
-		
-	private:
+		void move(int dx, int dy); //move by specific distance
 
+	private:
 		//for naming box
 		Text text;
-		static const int H_TB = 24;//textbox heigth
-
+		static const int H_TB = 24; //textbox heigth
 	};
 
 
@@ -466,11 +463,11 @@ namespace Graph_lib {
 	struct Arrow : Line {
 
 		Arrow(Point start, Point end) : Line(start, end){};
-		 void draw_lines() const;
+		void draw_lines() const;
 	};
-
+	//------------------------------------------------------------------------------
 	//function to get shape
-	Point n(const Graph_lib::Rectangle &r);
+	Point n(const Graph_lib::Rectangle& r);
 	Point s(const Graph_lib::Rectangle& r);
 	Point e(const Graph_lib::Rectangle& r);
 	Point w(const Graph_lib::Rectangle& r);
@@ -492,7 +489,7 @@ namespace Graph_lib {
 	Point se(const Graph_lib::Circle& r);
 	Point nw(const Graph_lib::Circle& r);
 	Point sw(const Graph_lib::Circle& r);
-	
+
 	//func for ellipse
 	Point n(const Graph_lib::Ellipse& el);
 	Point s(const Graph_lib::Ellipse& el);
@@ -505,9 +502,16 @@ namespace Graph_lib {
 	Point nw(const Graph_lib::Ellipse& el);
 	Point sw(const Graph_lib::Ellipse& el);
 
-
-
 	//------------------------------------------------------------------------------
+	struct Regular_hexagon : Shape { // six-sided polygon with all sides of equal length
+		Regular_hexagon(Point xy, int ss);
+		void draw_lines() const;
+	private:
+		int s; //length of one side
+		void set_points(Point xy, int s);
+	};
+	//------------------------------------------------------------------------------
+
 } // of namespace Graph_lib
 
 #endif

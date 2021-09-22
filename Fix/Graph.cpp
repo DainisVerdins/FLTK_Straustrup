@@ -307,8 +307,17 @@ namespace Graph_lib {
 	//------------------------------------------------------------------------------
 
 	void Circle::draw_lines() const {
-		if (color().visibility())
+
+		if (fill_color().visibility()) { // fill
+			fl_color(fill_color().as_int());
+			fl_pie(point(0).x, point(0).y, r + r - 1, r + r - 1, 0, 360);
+			fl_color(color().as_int()); // reset color
+		}
+
+		if (color().visibility()) {
+			fl_color(color().as_int());
 			fl_arc(point(0).x, point(0).y, r + r, r + r, 0, 360);
+		}
 	}
 
 	//------------------------------------------------------------------------------
@@ -561,7 +570,8 @@ namespace Graph_lib {
 		}
 	}
 
-	Box::Box(Point xy, int ww, int hh) : w{ ww }, h{ hh } {
+	Box::Box(Point xy, int ww, int hh)
+		: w{ ww }, h{ hh } {
 
 		if (h <= 0 || w <= 0)
 			error("Bad rectangle: non-positive side WIDTH OR HEIGHT");
@@ -697,12 +707,11 @@ namespace Graph_lib {
 	}
 
 	Point e(const Graph_lib::Circle& c) {
-		return Point{ c.point(0).x + c.radius(), c.point(0).y + (c.radius() / 2) };
+		return Point{ c.center().x + c.radius(), c.center().y };
 	}
 
 	Point w(const Graph_lib::Circle& c) {
-		return Point{ c.point(0).x, c.point(0).y + (c.radius() / 2) };
-		;
+		return Point{ c.center().x - c.radius(), c.center().y };
 	}
 
 	Point center(const Graph_lib::Circle& c) {
@@ -785,7 +794,6 @@ namespace Graph_lib {
 		if (color().visibility()) {
 			Box::draw_lines();
 			text.draw(); //draw text inside box
-		
 		}
 	}
 
@@ -797,6 +805,40 @@ namespace Graph_lib {
 	void TextBox::move(int dx, int dy) {
 		Box::Box::move(dx, dy);
 		text.move(dx, dy);
+	}
+
+	Regular_hexagon::Regular_hexagon(Point xy, int ss)
+		: s(ss) {
+		for (size_t i = 0; i < 6; i++) {
+			add(Point{});
+		}
+		set_points(xy, ss);
+	}
+
+	void Regular_hexagon::draw_lines() const {
+		if (fill_color().visibility()) {
+			fl_color(fill_color().as_int());
+			fl_begin_complex_polygon();
+			for (int i = 0; i < number_of_points(); ++i)
+				fl_vertex(point(i).x, point(i).y);
+			fl_end_complex_polygon();
+			fl_color(color().as_int()); // reset color
+		}
+
+		if (color().visibility()) {
+			for (int i = 0; i < number_of_points() - 1; ++i)
+				fl_line(point(i).x, point(i).y, point(i + 1).x, point(i + 1).y);
+			fl_line(point(5).x, point(5).y, point(0).x, point(0).y); // close hexagon
+		}
+	}
+
+	void Regular_hexagon::set_points(Point xy, int s) {
+		set_point(0, Point(xy.x - s, xy.y)); // set leftmost point
+		set_point(1, Point(xy.x - round(s / 2.0), xy.y + round(sqrt(3) / 2 * s)));
+		set_point(2, Point(xy.x + round(s / 2.0), xy.y + round(sqrt(3) / 2 * s)));
+		set_point(3, Point(xy.x + s, xy.y));
+		set_point(4, Point(xy.x + round(s / 2.0), xy.y - round(sqrt(3) / 2 * s)));
+		set_point(5, Point(xy.x - round(s / 2.0), xy.y - round(sqrt(3) / 2 * s)));
 	}
 
 } // of namespace Graph_lib
