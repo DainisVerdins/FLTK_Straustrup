@@ -510,7 +510,72 @@ namespace Graph_lib {
 		int s; //length of one side
 		void set_points(Point xy, int s);
 	};
+	//------------------------------------------------------------------------------        
+	struct Smiley:Circle {
+		Smiley(Point xy, int r);
+		void draw_lines() const override;
+
+	private:
+		const float eye_scale =0.33f ; //scale of the eye radius from total radius
+		const float mouth_scale = 0.25f; //scale of the eye radius from total radius
+	};
+
 	//------------------------------------------------------------------------------
+	struct Frowny : Circle {
+		Frowny(Point xy, int r);
+		void draw_lines() const override;
+
+	private:
+		const float eye_scale = 0.33f;	 //scale of the eye radius from total radius
+		const float mouth_scale = 0.25f; //scale of the eye radius from total radius
+	};
+
+	//------------------------------------------------------------------------------
+	struct Frowny_hat : Frowny {//draws frowny smile with hat
+		Frowny_hat(Point xy, int r);
+		void draw_lines() const override;
+
+	};
+
+	//------------------------------------------------------------------------------
+	struct Smiley_hat : Smiley {
+		Smiley_hat(Point xy, int r);
+		void draw_lines() const override;
+
+	};
+
+	//------------------------------------------------------------------------------
+	struct Immobile_Circle : Circle {
+		Immobile_Circle(Point xy, int r);
+		void move(int dx, int dy) override;
+
+
+	};
+
+	//------------------------------------------------------------------------------
+
+	struct Striped_rectangle : Rectangle {
+		Striped_rectangle(Point xy, int ww, int hh);
+		Striped_rectangle(Point x, Point y);
+		void draw_lines() const override;
+	};
+
+	//------------------------------------------------------------------------------
+	struct Striped_circle : Circle {
+		Striped_circle(Point xy, int r);
+		void draw_lines() const override;
+	};
+
+	//------------------------------------------------------------------------------
+	struct Octagon: Shape { // 8-sided polygon with all sides of equal length// NOT DONE AT ALL!
+		//Octagon(Point xy, int ss);
+		//void draw_lines() const override;
+
+	private:
+		int s; //length of one side
+		void set_points(Point xy, int s);
+	};
+	//------------------------------------------------------------------------------    
 
 } // of namespace Graph_lib
 

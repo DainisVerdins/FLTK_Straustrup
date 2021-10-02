@@ -158,7 +158,8 @@ namespace Graph_lib {
 
 	// does two lines (p1,p2) and (p3,p4) intersect?
 	// if so, return the distance of the intersect point as distances from p1
-	inline pair<double, double> line_intersect(Point p1, Point p2, Point p3, Point p4, bool& parallel) {
+	inline pair<double, double> line_intersect(Point p1, Point p2,
+		Point p3, Point p4, bool& parallel) {
 		double x1 = p1.x;
 		double x2 = p2.x;
 		double x3 = p3.x;
@@ -539,10 +540,11 @@ namespace Graph_lib {
 
 
 
-	Arc::Arc(Point center_coords, int r, double start_angle, double end_angle) : center{ center_coords }, radius{ r },
-																				 start{ start_angle }, end{ end_angle }
+	Arc::Arc(Point center_coords, int r, double start_angle, double end_angle)
+		: center{ center_coords }, radius{ r }, start{ start_angle }, end{ end_angle }
 
 	{
+
 		if (start_angle >= end_angle) {
 			error("value degree first param must be lower than second param");
 		}
@@ -839,6 +841,168 @@ namespace Graph_lib {
 		set_point(3, Point(xy.x + s, xy.y));
 		set_point(4, Point(xy.x + round(s / 2.0), xy.y - round(sqrt(3) / 2 * s)));
 		set_point(5, Point(xy.x - round(s / 2.0), xy.y - round(sqrt(3) / 2 * s)));
+
+
+	}
+
+	Smiley::Smiley(Point xy, int r)
+		: Circle(xy, r) {
+	}
+
+	void Smiley::draw_lines() const {
+		if (color().visibility()) {
+			Circle::draw_lines();
+			int eye_radius = eye_scale * Circle::radius();
+			int mouth_radius = mouth_scale * Circle::radius();
+
+			//lips of smile//probably just to need use ugly fl_arc() not extra class
+			Arc lips{ Point{ Circle::center().x, Circle::center().y + (Circle::radius() / 2) },
+				mouth_radius, 180, 360 };
+
+			lips.draw_lines();
+
+			int eye_height_koef = 4; //from radius how higth are eyes
+			int distance = 5;		 //distance between eyes in pixels from radius
+
+			Circle reye{ Point{ Circle::center().x - eye_radius - distance,
+							 Circle::center().y - (Circle::radius() / eye_height_koef) },
+				eye_radius };
+			reye.draw_lines();
+
+			Circle leye{ Point{ Circle::center().x + eye_radius + distance,
+							 Circle::center().y - (Circle::radius() / eye_height_koef) },
+				eye_radius };
+			leye.draw_lines();
+		}
+	}
+
+	Frowny::Frowny(Point xy, int r)
+		: Circle(xy, r) {
+	}
+
+	void Frowny::draw_lines() const {
+		if (color().visibility()) {
+			Circle::draw_lines();
+			int eye_radius = eye_scale * Circle::radius();
+			int mouth_radius = mouth_scale * Circle::radius();
+
+			//lips of smile//probably just to need use ugly fl_arc() not extra class
+			Arc lips{ Point{ Circle::center().x, Circle::center().y + (Circle::radius() / 2) },
+				mouth_radius, 0, 180 };
+
+			lips.draw_lines();
+
+			int eye_height_koef = 4; //from radius how higth are eyes
+			int distance = 5;		 //distance between eyes in pixels from radius
+
+			Circle reye{ Point{ Circle::center().x - eye_radius - distance,
+							 Circle::center().y - (Circle::radius() / eye_height_koef) },
+				eye_radius };
+			reye.draw_lines();
+
+			Circle leye{ Point{ Circle::center().x + eye_radius + distance,
+							 Circle::center().y - (Circle::radius() / eye_height_koef) },
+				eye_radius };
+			leye.draw_lines();
+		}
+	}
+
+	Frowny_hat::Frowny_hat(Point xy, int r)
+		: Frowny::Frowny(xy, r) {}
+
+	void Frowny_hat::draw_lines() const {
+		Frowny::draw_lines();
+
+		//triangular hat //
+		Point top{ Frowny::center().x, Frowny::center().y - (Frowny::radius() * 2) };
+		Point left_angle{ Frowny::center().x - Frowny::radius(), Frowny::center().y - Frowny::radius() };
+		Point rigth_angle{ Frowny::center().x + Frowny::radius(), Frowny::center().y - Frowny::radius() };
+
+		Closed_polyline hat{ top };
+		hat.add(left_angle);
+		hat.add(rigth_angle);
+
+		hat.draw_lines();
+	}
+
+	Smiley_hat::Smiley_hat(Point xy, int r)
+		: Smiley::Smiley{ xy, r } {
+	}
+
+	void Smiley_hat::draw_lines() const {
+		Smiley::draw_lines();
+
+		//triangular hat //
+		Point top{ Smiley::center().x, Smiley::center().y - (Smiley::radius() * 2) };
+		Point left_angle{ Smiley::center().x - Smiley::radius(), Smiley::center().y - Smiley::radius() };
+		Point rigth_angle{ Smiley::center().x + Smiley::radius(), Smiley::center().y - Smiley::radius() };
+
+		Closed_polyline hat{ top };
+		hat.add(left_angle);
+		hat.add(rigth_angle);
+
+		hat.draw_lines();
+	}
+
+	Immobile_Circle::Immobile_Circle(Point xy, int r)
+		: Circle::Circle{ xy, r } {
+	}
+
+	void Immobile_Circle::move(int dx, int dy) {
+	}
+
+	Striped_rectangle::Striped_rectangle(Point xy, int ww, int hh) : Rectangle::Rectangle{ xy, ww, hh } {
+	}
+
+	Striped_rectangle::Striped_rectangle(Point x, Point y) : Rectangle::Rectangle{ x, y } {
+	}
+
+	void Striped_rectangle::draw_lines() const {
+		if (fill_color().visibility()) { // fill
+
+			//line magick
+			//for striped line rect
+			for (size_t i = 0; i < Rectangle::width(); i++) {
+				if (i % 2 == 0 && i != 0) {
+					fl_color(fill_color().as_int());
+					fl_line(point(0).x + i, point(0).y, point(0).x + i, point(0).y + Rectangle::height() - 1);
+				}
+			}
+			fl_color(fill_color().as_int()); //reset color
+		}
+
+		if (color().visibility()) { // lines on top of fill
+			fl_color(color().as_int());
+			fl_rect(point(0).x, point(0).y, Rectangle::width(), Rectangle::height());
+		}
+	}
+
+	Striped_circle::Striped_circle(Point xy, int r) : Circle{ xy, r } {
+	}
+
+	void Striped_circle::draw_lines() const {
+		if (fill_color().visibility()) { // fill
+			fl_color(fill_color().as_int());
+			//line magick
+			//for striped line rect
+			int dy = 0;
+			int dx = 0;
+			for (size_t i = (Circle::center().x - Circle::radius()); 
+				i < Circle::center().x + Circle::radius();i += 2) 
+			{
+
+				dy = center().y - i; //get line length of specific y in circle
+				dx = round(sqrt(radius() * radius() - dy * dy)) - 1;
+
+				fl_line(center().x - dx, i, center().x + dx, i);
+			}
+			fl_color(fill_color().as_int()); //reset color
+		}
+
+		if (color().visibility()) { // lines on top of fill
+			fl_color(color().as_int());
+			fl_arc(point(0).x, point(0).y, 2 * radius(), 2 * radius(), 0, 360);
+		}
 	}
 
 } // of namespace Graph_lib
