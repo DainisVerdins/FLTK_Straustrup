@@ -58,11 +58,10 @@ Lines_window::Lines_window(Point xy, int w, int h, const string& title)
 	  xy_out{ Point{ 100, 0 }, 100, 20, "current (х,y) :" },
 
 	  color_menu{ Point{ x_max() - 70, 40 }, 70, 20, Menu::vertical, "color" },
-	  menu_button{ Point{ x_max() - 80, 30 }, 80, 20, "color menu",cb_menu },
-	  
+	  menu_button{ Point{ x_max() - 80, 30 }, 80, 20, "color menu", cb_menu },
+
 	  line_style_menu{ Point{ x_max() - 150, 40 }, 90, 20, Menu::vertical, "style" },
-	  line_style_btn{ Point{ x_max() - 160, 30 }, 70, 20, "style menu", cb_style_menu }
-		  {
+	  line_style_btn{ Point{ x_max() - 160, 30 }, 70, 20, "style menu", cb_style_menu } {
 	attach(next_button);
 	attach(quit_button);
 	attach(next_x);
@@ -71,7 +70,7 @@ Lines_window::Lines_window(Point xy, int w, int h, const string& title)
 	xy_out.put("no point");
 
 	//probably change to lambda
-	color_menu.attach(new Button{ Point{ 0, 0 }, 0, 0, "red",cb_red });
+	color_menu.attach(new Button{ Point{ 0, 0 }, 0, 0, "red", cb_red });
 	color_menu.attach(new Button{ Point{ 0, 0 }, 0, 0, "blue", cb_blue });
 	color_menu.attach(new Button{ Point{ 0, 0 }, 0, 0, "black", cb_black });
 
@@ -98,7 +97,7 @@ Lines_window::Lines_window(Point xy, int w, int h, const string& title)
 
 void Lines_window::cb_red(Address, Address pw) {
 
-	 reference_to<Lines_window>(pw).red_pressed();
+	reference_to<Lines_window>(pw).red_pressed();
 }
 
 void Lines_window::cb_blue(Address, Address pw) {
@@ -126,7 +125,6 @@ void Lines_window::cb_style_menu(Address, Address pw) {
 }
 
 
-
 void Lines_window::next() {
 	int x = next_x.get_int();
 	int y = next_y.get_int();
@@ -141,7 +139,32 @@ void Lines_window::next() {
 }
 
 void Lines_window::quit() {
-	hide();//idiom of FLTK to delete window
+	hide(); //idiom of FLTK to delete window
 }
 
 //------------------------------------------------------------------------------
+
+My_window::My_window(Point xy, int w, int h, const string& title)
+	: Window{ xy, w, h, title },
+	  next_btn{ Point{ x_max() - 150, 0 }, 70, 20, "Next",
+		  [](Address, Address pw) {
+			  reference_to<My_window>(pw).next();
+		  } },
+	  quit_btn{ Point{ x_max() - 70, 0 }, 70, 20, "Quit",
+		  [](Address, Address pw) {
+			  reference_to<My_window>(pw).quit();
+		  } } {
+	next_btn_pushed = false;
+	attach(next_btn);
+	attach(quit_btn);
+}
+
+void My_window::next() {
+	next_btn_pushed = true;
+	redraw();
+}
+
+void My_window::quit() {
+	hide(); //idiom of FLTK to delete window
+
+}

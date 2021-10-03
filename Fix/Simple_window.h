@@ -120,4 +120,20 @@ private:
 };
 
 //------------------------------------------------------------------------------
+struct My_window:Graph_lib::Window {
+	My_window(Point xy, int w, int h, const string& title);
+
+private:
+	Button next_btn; // the "next" button
+	bool next_btn_pushed; // implementation detail
+
+	Button quit_btn; // the "quit" button
+
+	void next() ;	// action to be done when next_button is pressed
+	void quit() ; // action to be done when next_button is pressed
+	
+
+
+};
+//------------------------------------------------------------------------------
 #endif // SIMPLE_WINDOW_GUARD

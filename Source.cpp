@@ -29,9 +29,9 @@ int main() {
 	try {
 
 		Point top_left{ xspace, yspace }; //will be top left corner of window
-		Lines_window win{ top_left, xmax, ymax, "GUI polyliner" };
+		My_window win{ top_left, xmax, ymax, "GUI polyliner" };//task 1 done
 
-
+		
 		return gui_main();
 
 	}
