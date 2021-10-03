@@ -44,10 +44,14 @@ private:
 	Menu color_menu;
 	Button menu_button;
 
+	Menu line_style_menu;//pop pup menu for showing diferent lines
+	Button line_style_btn;
+
 	void hide_menu() {
 		color_menu.hide();
 		menu_button.show();
 	}
+
 	void red_pressed() {
 		change(Color::red);
 		hide_menu();
@@ -60,11 +64,41 @@ private:
 		change(Color::black);
 		hide_menu();
 	}
-	void menu_pressed() { menu_button.hide(), color_menu.show(); }
+	void menu_pressed() {
+		menu_button.hide();
+		color_menu.show();
+	}
 	void change(Color c) {
 		lines.set_color(c);
 		hide_menu();
 	}
+
+	void style_menu_pressed() {
+		line_style_btn.hide();
+		line_style_menu.show();
+	}
+	void change_style(Line_style s) {
+		lines.set_style(s);
+		hide_lines_menu();
+	}
+	//solid , dash dot
+	void solid_pressed() {
+		change_style(Line_style::solid);
+		hide_lines_menu();
+	}
+	void dash_pressed() {
+		change_style(Line_style::dash);
+		hide_lines_menu();
+	}
+	void dot_pressed() {
+		change_style(Line_style::dot);
+		hide_lines_menu();
+	}
+	void hide_lines_menu() {
+		line_style_menu.hide();
+		line_style_btn.show();
+	}
+
 	void next();
 	void quit();
 
@@ -75,9 +109,14 @@ private:
 	static void cb_blue(Address, Address pw);
 	//callback for black btn
 	static void cb_black(Address, Address pw);
+
+
+
 	static void cb_menu(Address, Address pw);
 	static void cb_next(Address, Address pw);
 	static void cb_quit(Address, Address pw);
+
+	static void cb_style_menu(Address, Address pw);
 };
 
 //------------------------------------------------------------------------------

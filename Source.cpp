@@ -29,7 +29,7 @@ int main() {
 	try {
 
 		Point top_left{ xspace, yspace }; //will be top left corner of window
-		Lines_window win{ top_left, xmax, ymax, "simple window" };
+		Lines_window win{ top_left, xmax, ymax, "GUI polyliner" };
 
 
 		return gui_main();

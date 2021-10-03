@@ -56,8 +56,12 @@ Lines_window::Lines_window(Point xy, int w, int h, const string& title)
 	  next_x{ Point{ x_max() - 310, 0 }, 50, 20, "next x:" },
 	  next_y{ Point{ x_max() - 210, 0 }, 50, 20, "next y: " },
 	  xy_out{ Point{ 100, 0 }, 100, 20, "current (х,y) :" },
+
 	  color_menu{ Point{ x_max() - 70, 40 }, 70, 20, Menu::vertical, "color" },
-	  menu_button{ Point{ x_max() - 80, 30 }, 80, 20, "color menu",cb_menu }
+	  menu_button{ Point{ x_max() - 80, 30 }, 80, 20, "color menu",cb_menu },
+	  
+	  line_style_menu{ Point{ x_max() - 150, 40 }, 90, 20, Menu::vertical, "style" },
+	  line_style_btn{ Point{ x_max() - 160, 30 }, 70, 20, "style menu", cb_style_menu }
 		  {
 	attach(next_button);
 	attach(quit_button);
@@ -75,6 +79,21 @@ Lines_window::Lines_window(Point xy, int w, int h, const string& title)
 	color_menu.hide();
 	attach(menu_button);
 	attach(lines);
+
+	//line style stuff
+	line_style_menu.attach(new Button{ Point{ 0, 0 }, 0, 0, "solid", [](Address, Address pw) {
+										  reference_to<Lines_window>(pw).solid_pressed();
+									  } });
+	line_style_menu.attach(new Button{ Point{ 0, 0 }, 0, 0, "dash", [](Address, Address pw) {
+										  reference_to<Lines_window>(pw).dash_pressed();
+									  } });
+	line_style_menu.attach(new Button{ Point{ 0, 0 }, 0, 0, "dot", [](Address, Address pw) {
+										  reference_to<Lines_window>(pw).dot_pressed();
+									  } });
+
+	attach(line_style_menu);
+	line_style_menu.hide();
+	attach(line_style_btn);
 }
 
 void Lines_window::cb_red(Address, Address pw) {
@@ -100,6 +119,10 @@ void Lines_window::cb_next(Address, Address pw) {
 
 void Lines_window::cb_quit(Address, Address pw) {
 	reference_to<Lines_window>(pw).quit();
+}
+
+void Lines_window::cb_style_menu(Address, Address pw) {
+	reference_to<Lines_window>(pw).style_menu_pressed();
 }
 
 
