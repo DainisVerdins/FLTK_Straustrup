@@ -16,7 +16,7 @@
 #include <vector>
 #include <iostream>
 
-
+#include<random>
 
 
 #include <algorithm>
@@ -39,5 +39,11 @@ inline void error(string s1, string s2)
 }
 
 //------------------------------------------------------------------------------
+inline int rand_int(int min, int max) {
+	static std::default_random_engine ran;
+	return uniform_int_distribution<>{ min, max }(ran);
+}
+//------------------------------------------------------------------------------
+
 
 #endif // STD_LIB_FACILITIES_GUARD
